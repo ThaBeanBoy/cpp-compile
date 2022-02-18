@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // var inquirer = require('inquirer');
 
 inquirer
@@ -9,7 +11,7 @@ inquirer
       choices: ['Yes', 'No'],
     },
   ])
-  .then(({answers}) => {
+  .then(({ answers }) => {
     // Use user feedback for... whatever!!
     console.log(answers);
   })

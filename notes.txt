@@ -1,0 +1,2 @@
+alot of help from https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs
+helped in understanding the bin folder, and you have to install this globally for the CLI to work anywhere
