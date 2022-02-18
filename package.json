@@ -1,0 +1,15 @@
+{
+  "name": "cpp-compiler",
+  "version": "1.0.0",
+  "description": "Help compile cpp projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "TG Chipoyera",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^8.1.5",
+    "nodemon": "^2.0.13"
+  }
+}
