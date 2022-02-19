@@ -2,9 +2,9 @@
   "name": "cpp-compiler",
   "version": "1.0.0",
   "description": "Help compile cpp projects",
-  "main": "bin/dummy.js",
+  "main": "bin/compile.js",
   "bin": {
-    "hello": "./bin/index.js"
+    "cpp-comp": "./bin/compile.js"
   },
   "type": "module",
   "scripts": {

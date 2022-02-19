@@ -1,22 +1,18 @@
 {
-    "Keep-o-files": false,
-    "watch": false,
-    "clean": false,
-    
-    "sourceFolder": "",
-    "outputExecs": "",
-    
-    "dontCompile": [
-        
-    ],
-    
-    "execFile": "Bundled",
-    "exeFiles": [
-        {
-            "name": "main",
-            "files": [
+  "keep-o-files": false,
+  "watch": false,
+  "clean": false,
 
-            ]
-        }
-    ]
+  "sourceFolder": "",
+  "outputExecs": "",
+
+  "dontCompile": [],
+
+  "execFile": "Bundled",
+  "exeFiles": [
+    {
+      "name": "main",
+      "files": []
+    }
+  ]
 }
