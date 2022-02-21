@@ -8,8 +8,8 @@ import inquirer from 'inquirer';
 
 import chalk from 'chalk';
 
-// import { compile } from 'compile';
-import { mkDir } from 'helpers';
+import compile from './compile.js';
+import { mkDir } from './helpers.js';
 
 // console.log('Welcome to my ' + chalk.underline('CPP Compiler'));
 // inquirer.prompt([
@@ -22,8 +22,23 @@ import { mkDir } from 'helpers';
 //   },
 // ]);
 
-mkDir('hello');
-// compile();
+// mkDir('hello');
+const errChalk = (msg) =>
+  chalk.underline.bgRed.black('Error: ') +
+  chalk.underline.bgRed.black(msg) +
+  '';
+compile({
+  noSource: () => {
+    console.error(chalk.underline.bgRed.black('There is no source'));
+    inquirer.prompt({
+      name: 'generateDefaultSource',
+      message: 'Should I generate the default source folder for you?',
+      type: 'confirm',
+    });
+  },
+  oFilesBuildError: () => console.log(errChalk('Error in building .o Files')),
+});
+// console.log(errChalk('Lol, no error'));
 
 /* 
   --help: list all possible commands

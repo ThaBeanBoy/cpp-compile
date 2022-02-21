@@ -2,6 +2,7 @@
   "keep-o-files": false,
   "watch": false,
   "clean": false,
+  "dontClean": [],
 
   "sourceFolder": "",
   "outputExecs": "",

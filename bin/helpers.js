@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
+import path from 'path';
 
 const mkDir = (path) => {
   if (!fs.existsSync(path)) {
@@ -14,24 +15,40 @@ const mkDir = (path) => {
   }
 };
 
-// dir, travelDown = true, pathsArr
-const dispFilesInDir = (parameters) => {
-  const { dir, travelDown, pathsArr } = parameters;
-  const missingDetails = dir === undefined;
+// dir, travelDown = true,
+const filesInDir = (parameters) => {
+  const { dir, travelDown, extNames } = parameters;
+  const missingDetails = dir !== undefined;
 
+  let filePaths = [];
+
+  // Getting all the files
   if (missingDetails) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach((dirent) => {
       if (dirent.isFile()) {
-        pathsArr.push(`${dir}/${dirent.name}`);
+        filePaths.push(`${dir}/${dirent.name}`);
       } else if (travelDown) {
-        dispFilesInDir(`${dir}/${dirent.name}`);
+        filesInDir(`${dir}/${dirent.name}`);
       }
     });
   } else {
     console.error('You need to input a directory');
   }
 
-  return pathsArr;
+  // filtering based on extension name/s
+  if (extNames !== undefined) {
+    // Has to filter based on multiple file extensions
+    if (Array.isArray(extNames)) {
+      filePaths = filePaths.filter((file) =>
+        extNames.some((ext) => path.extname(file) === ext)
+      );
+    }
+    // Has to filter based on 1 ext name
+    else {
+      filePaths = filePaths.filter((file) => path.extname(file) === extNames);
+    }
+  }
+  return filePaths;
 };
 
-export { mkDir, dispFilesInDir };
+export { mkDir, filesInDir };
