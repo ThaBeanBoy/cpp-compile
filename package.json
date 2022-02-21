@@ -2,9 +2,9 @@
   "name": "cpp-compiler",
   "version": "1.0.0",
   "description": "Help compile cpp projects",
-  "main": "bin/compile.js",
+  "main": "bin/cli.js",
   "bin": {
-    "cpp-comp": "./bin/compile.js"
+    "cpp-comp": "./bin/cli.js"
   },
   "type": "module",
   "scripts": {
@@ -13,7 +13,9 @@
   "author": "TG Chipoyera",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^5.0.0",
     "inquirer": "^8.1.5",
-    "nodemon": "^2.0.13"
+    "nodemon": "^2.0.13",
+    "yargs": "^17.3.1"
   }
 }
