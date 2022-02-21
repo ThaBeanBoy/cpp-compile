@@ -8,7 +8,8 @@ import { mkDir, filesInDir } from './helpers.js';
 
 // Parameters: compileSuccess: function, noErrors: function, noSource :function
 const compile = (Parameters) => {
-  let { compileSuccess, noErrors, noSource, oFilesBuildError } = Parameters;
+  let { compileSuccess, noErrors, noSource, oFilesBuildError, exeBuildErr } =
+    Parameters;
 
   //   default values
   compileSuccess = compileSuccess !== undefined ? compileSuccess : () => {};
@@ -19,6 +20,10 @@ const compile = (Parameters) => {
     oFilesBuildError !== undefined
       ? oFilesBuildError
       : console.log('Error in building .o files');
+  exeBuildErr =
+    exeBuildErr !== undefined
+      ? exeBuildErr
+      : console.log('Err in building the executable');
 
   /* 
   Make directories that may not be there
@@ -36,8 +41,8 @@ const compile = (Parameters) => {
     extNames: '.cpp',
   });
 
-  let oFileGenerationError = false;
   for (const file of filePaths) {
+    let oFileGenerationError = false;
     execSync(`g++ -c ${file}`, (err, stdout, stderr) => {
       if (err) {
         console.log(`error: ${err.message}`);
@@ -51,14 +56,14 @@ const compile = (Parameters) => {
 
       if (oFileGenerationError) {
         oFilesBuildError();
-        // Delete any of the .o files that were built
+        //! Delete any of the .o files that were built
         return;
       }
     });
   }
 
   // Making the exe file
-  let exeBuildCommand = 'g++ -o main ';
+  let exeBuildCommand = 'g++ -o bin/main ';
   const oFilesGenerated = filesInDir({
     dir: '.',
     travelDown: false,
@@ -68,12 +73,51 @@ const compile = (Parameters) => {
     (file) => (exeBuildCommand += `${file.replace('./', '')} `)
   );
   console.log(exeBuildCommand);
-  // const oFilesGenerated =
-  // Delete the old .o files and .exe
-  // Place exe file in the bin
-  // Place .o files in bin/oFiles
+  execSync(exeBuildCommand, (err, stdout, stderr) => {
+    let exeBuildErr = false;
+    if (err) {
+      console.log(`error: ${err.message}`);
+      exeBuildErr = true;
+    } else if (stderr) {
+      console.log(`stderr: ${stderr}`);
+      exeBuildErr = true;
+    }
 
-  // Moving all the .o files into the ./bin/oFiles/
+    console.log(`stdout: ${stdout}`);
+
+    if (exeBuildErr) {
+      exeBuildErr();
+      //! Delete any of the .o files that were built
+      return;
+    }
+  });
+
+  // Delete the old .o files and .exe
+  filesInDir({
+    dir: './bin/oFiles',
+    travelDown: true,
+    extNames: ['.o', '.exe'],
+  }).forEach((file) => fs.unlinkSync(file, () => {}));
+
+  // Place exe file and .o files in the bin
+  filesInDir({
+    dir: '.',
+    travelDown: true,
+    extNames: ['.o', '.exe'],
+  }).forEach((file) => {
+    // Moving .o files
+    let newPath =
+      path.extname(file) === '.o'
+        ? `./bin/oFiles/${file.replace('./', '')}`
+        : `./bin/`;
+    // if (path.extname(file) === '.o') {
+    // }
+    // // Moving .exe file
+    // else{
+
+    // }
+    fs.renameSync(file, newPath);
+  });
 
   //<>   if the compilation is done with no errors, respond to the cli
 };

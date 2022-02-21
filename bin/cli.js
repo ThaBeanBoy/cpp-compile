@@ -5,7 +5,6 @@ import path from 'path';
 import { execSync } from 'child_process';
 
 import inquirer from 'inquirer';
-
 import chalk from 'chalk';
 
 import compile from './compile.js';
@@ -37,6 +36,7 @@ compile({
     });
   },
   oFilesBuildError: () => console.log(errChalk('Error in building .o Files')),
+  exeBuildErr: () => console.log(errChalk('Erro in building the executable')),
 });
 // console.log(errChalk('Lol, no error'));
 
