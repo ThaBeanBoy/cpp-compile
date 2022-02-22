@@ -35,6 +35,7 @@ const compile = (Parameters) => {
   mkDir('./bin/oFiles');
 
   // Make .o files
+  // <> What should happen if there are no .cpp files
   const filePaths = filesInDir({
     dir: './source',
     travelDown: true,
