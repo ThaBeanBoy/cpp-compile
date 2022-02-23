@@ -1,14 +1,11 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
 
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 
 import compile from './compile.js';
-import { mkDir } from './helpers.js';
 
 // console.log('Welcome to my ' + chalk.underline('CPP Compiler'));
 // inquirer.prompt([
@@ -26,16 +23,68 @@ const errChalk = (msg) =>
   chalk.underline.bgRed.black('Error: ') +
   chalk.underline.bgRed.black(msg) +
   '';
+
 compile({
-  noSource: () => {
-    console.error(chalk.underline.bgRed.black('There is no source'));
-    inquirer.prompt({
-      name: 'generateDefaultSource',
-      message: 'Should I generate the default source folder for you?',
-      type: 'confirm',
-    });
+  noSource: (params) => {
+    const { rtnTrue, rtnFalse } = params;
+
+    console.log(chalk.underline.bgRed.black('There is no source'));
+    console.log('');
+
+    inquirer
+      .prompt({
+        name: 'init',
+        type: 'confirm',
+        message:
+          'It seems like there are no source files, your project might not have been initialised, should I initialise?',
+      })
+      .then((answer) => {
+        const { init } = answer;
+
+        if (init) {
+          // Call the init function
+
+          // Returning false so the compile module doesn't do anything
+          return rtnFalse();
+        } else {
+          inquirer
+            .prompt({
+              name: 'makeDirs',
+              type: 'confirm',
+              message: 'Should I make the source and bin folder for you?',
+            })
+            .then((answer) => (answer.makeDirs ? rtnTrue() : rtnFalse()));
+        }
+      });
   },
+
+  noCppFiles: (params) => {
+    const { rtnTrue, rtnFalse } = params;
+
+    inquirer
+      .prompt({
+        name: 'InjectCppFile',
+        type: 'confirm',
+        message:
+          'There are no .cpp files in your source, should I generate a default main.cpp file in your source?',
+      })
+      .then((answer) => {
+        const { InjectCppFile } = answer;
+
+        if (InjectCppFile) {
+          console.log(
+            `def main.cpp exist: ${fs.existsSync('./defaultFiles/main.cpp')}`
+          );
+
+          // rtnTrue();
+        } else {
+          rtnFalse();
+        }
+      });
+  },
+
   oFilesBuildError: () => console.log(errChalk('Error in building .o Files')),
+
   exeBuildErr: () => console.log(errChalk('Erro in building the executable')),
 });
 // console.log(errChalk('Lol, no error'));
