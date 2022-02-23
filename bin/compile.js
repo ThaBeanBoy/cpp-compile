@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 
-import { mkDir, filesInDir } from './helpers.js';
+import { mkDir, filesInDir, consoleMessages, readFile } from './helpers.js';
 
 // Parameters: compileSuccess: function, noErrors: function, noSource :function
 const compile = (Parameters) => {
@@ -25,114 +25,149 @@ const compile = (Parameters) => {
   oFilesBuildError =
     oFilesBuildError !== undefined
       ? oFilesBuildError
-      : console.log('Error in building .o files');
+      : consoleMessages.compilerErr('Error in building .o files');
   exeBuildErr =
     exeBuildErr !== undefined
       ? exeBuildErr
-      : console.log('Err in building the executable');
+      : consoleMessages.compilerErr('Err in building the executable');
 
   // if the source doesn't exeist, alert the cli
-  noSource({
-    rtnTrue: () => {
-      /* 
+  // fs.existsSync('./source')?
+  const theresSourceCompile = () => {
+    /* 
         Make directories that may not be there
         Important directories: source, bin and ./bin/oFiles
       */
-      mkDir('source');
-      mkDir('./bin');
-      mkDir('./bin/oFiles');
+    mkDir('./source');
+    mkDir('./bin');
+    mkDir('./bin/oFiles');
 
-      // Make .o files
-      // <> What should happen if there are no .cpp files
-      const filePaths = filesInDir({
-        dir: './source',
-        travelDown: true,
-        extNames: '.cpp',
-      });
+    // Make .o files
+    // <> What should happen if there are no .cpp files
+    let filePaths = filesInDir({
+      dir: './source',
+      travelDown: true,
+      extNames: '.cpp',
+    });
 
-      // Continue with compilation if .cpp files are found, otherwise, execute the noCppFiles function
-      const compileFiles = () => {
-        for (const file of filePaths) {
-          let oFileGenerationError = false;
-          execSync(`g++ -c ${file}`, (err, stdout, stderr) => {
-            if (err) {
-              console.log(`error: ${err.message}`);
-              oFileGenerationError = true;
-            } else if (stderr) {
-              console.log(`stderr: ${stderr}`);
-              oFileGenerationError = true;
-            }
-
-            console.log(`stdout: ${stdout}`);
-
-            if (oFileGenerationError) {
-              oFilesBuildError();
-              //! Delete any of the .o files that were built
-              return;
-            }
-          });
-        }
-
-        // Making the exe file
-        let exeBuildCommand = 'g++ -o bin/main ';
-        const oFilesGenerated = filesInDir({
-          dir: '.',
-          travelDown: false,
-          extNames: '.o',
-        });
-        oFilesGenerated.forEach(
-          (file) => (exeBuildCommand += `${file.replace('./', '')} `)
-        );
-        console.log(exeBuildCommand);
-        execSync(exeBuildCommand, (err, stdout, stderr) => {
-          let exeBuildErr = false;
+    // Continue with compilation if .cpp files are found, otherwise, execute the noCppFiles function
+    const compileFiles = () => {
+      console.log('file paths:', filePaths);
+      for (const file of filePaths) {
+        let oFileGenerationError = false;
+        execSync(`g++ -c ${file}`, (err, stdout, stderr) => {
           if (err) {
             console.log(`error: ${err.message}`);
-            exeBuildErr = true;
+            oFileGenerationError = true;
           } else if (stderr) {
             console.log(`stderr: ${stderr}`);
-            exeBuildErr = true;
+            oFileGenerationError = true;
           }
 
           console.log(`stdout: ${stdout}`);
 
-          if (exeBuildErr) {
-            exeBuildErr();
-            //! Delete any of the .o files that were built
+          if (oFileGenerationError) {
+            oFilesBuildError();
+
+            // Delete any of the .o files that were built
+            filesInDir({
+              dir: '.',
+              travelDown: false,
+              extNames: '.o',
+            }).forEach((file) => {
+              fs.unlinkSync(file, () => {});
+            });
+
             return;
           }
         });
+      }
 
-        // Delete the old .o files and .exe
-        filesInDir({
-          dir: './bin/oFiles',
-          travelDown: true,
-          extNames: ['.o', '.exe'],
-        }).forEach((file) => fs.unlinkSync(file, () => {}));
+      // Making the exe file
+      let exeBuildCommand = 'g++ -o bin/main ';
+      const oFilesGenerated = filesInDir({
+        dir: '.',
+        travelDown: false,
+        extNames: '.o',
+      });
+      oFilesGenerated.forEach(
+        (file) => (exeBuildCommand += `${file.replace('./', '')} `)
+      );
+      console.log(exeBuildCommand);
+      execSync(exeBuildCommand, (err, stdout, stderr) => {
+        let thereWasExeBuildErr = false;
+        if (err) {
+          console.log(`error: ${err.message}`);
+          thereWasExeBuildErr = true;
+        } else if (stderr) {
+          console.log(`stderr: ${stderr}`);
+          thereWasExeBuildErr = true;
+        }
 
-        // Place exe file and .o files in the bin
-        filesInDir({
-          dir: '.',
-          travelDown: true,
-          extNames: ['.o', '.exe'],
-        }).forEach((file) => {
-          // Moving .o files
-          let newPath =
-            path.extname(file) === '.o'
-              ? `./bin/oFiles/${file.replace('./', '')}`
-              : `./bin/`;
+        console.log(`stdout: ${stdout}`);
 
-          fs.renameSync(file, newPath);
+        if (thereWasExeBuildErr) {
+          exeBuildErr();
+          //<> Delete any of the .o files that were built
+          return;
+        }
+      });
+
+      // Delete the old .o files and .exe
+      filesInDir({
+        dir: './bin/oFiles',
+        travelDown: true,
+        extNames: ['.o', '.exe'],
+      }).forEach((file) => fs.unlinkSync(file, () => {}));
+
+      // Place exe file and .o files in the bin
+      filesInDir({
+        dir: '.',
+        travelDown: true,
+        extNames: ['.o', '.exe'],
+      }).forEach((file) => {
+        // Moving .o files
+        let newPath =
+          path.extname(file) === '.o'
+            ? `./bin/oFiles/${file.replace('./', '')}`
+            : `./bin/`;
+
+        fs.renameSync(file, newPath);
+      });
+
+      //<> format all .cpp files with AStyle/ Artistic files
+
+      // if the compilation is done with no errors, respond to the cli
+      consoleMessages.allGood(' exe files ready to go!! ');
+    };
+
+    filePaths.length !== 0
+      ? compileFiles()
+      : noCppFiles({
+          rtnTrue: () => {
+            // Generate main.cpp file in source
+            consoleMessages.devErr('Making main.cpp');
+            const cppFileBoilerPlate = `#include <iostream>\nusing namespace std;\n\nint main() {\ncout << "Hello world" << endl;\n\nreturn 0;\n}\n// Auto generated file.`;
+            fs.appendFileSync('source/main.cpp', cppFileBoilerPlate);
+
+            // Updating the filePaths,  so it's now aware of the generated files
+            filePaths = filesInDir({
+              dir: './source',
+              travelDown: true,
+              extNames: '.cpp',
+            });
+
+            consoleMessages.devErr('compiling files');
+            compileFiles();
+          },
         });
+  };
 
-        //<>   if the compilation is done with no errors, respond to the cli
-      };
-
-      filePaths.length !== 0
-        ? compileFiles()
-        : noCppFiles({ rtnTrue: compileFiles });
-    },
-  });
+  fs.existsSync('./source')
+    ? theresSourceCompile()
+    : noSource({
+        rtnTrue: theresSourceCompile,
+      });
 };
 
 export default compile;

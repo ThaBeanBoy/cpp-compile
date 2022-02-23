@@ -15,5 +15,8 @@
       "name": "main",
       "files": []
     }
-  ]
+  ],
+
+  "dontFormatt": [],
+  "logCmdExecs": false
 }

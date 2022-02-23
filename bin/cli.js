@@ -1,28 +1,19 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 
 import compile from './compile.js';
 
-// console.log('Welcome to my ' + chalk.underline('CPP Compiler'));
-// inquirer.prompt([
-//   {
-//     type: 'list',
-//     name: 'findOutMethod',
-//     message: 'How did you find this terminal?',
-//     choices: ['Youtube Video', 'Internet', 'Friend recommendation'],
-//     default: 'Youtube Video',
-//   },
-// ]);
+import { consoleMessages } from './helpers.js';
 
-// mkDir('hello');
-const errChalk = (msg) =>
-  chalk.underline.bgRed.black('Error: ') +
-  chalk.underline.bgRed.black(msg) +
-  '';
+/* 
+  help: list all possible commands
+  run: just runs the cpp code
+  watch: makes exe and .o files and everything whenever a file is changed and/or saved
+  compile: simply compiles and stuff
+  
+*/
 
 compile({
   noSource: (params) => {
@@ -70,32 +61,16 @@ compile({
       })
       .then((answer) => {
         const { InjectCppFile } = answer;
-
-        if (InjectCppFile) {
-          console.log(
-            `def main.cpp exist: ${fs.existsSync('./defaultFiles/main.cpp')}`
-          );
-
-          // rtnTrue();
-        } else {
-          rtnFalse();
-        }
+        InjectCppFile ? rtnTrue() : rtnFalse();
       });
   },
 
-  oFilesBuildError: () => console.log(errChalk('Error in building .o Files')),
+  oFilesBuildError: () =>
+    consoleMessages.compilerErr('Error in building .o Files'),
 
-  exeBuildErr: () => console.log(errChalk('Erro in building the executable')),
+  exeBuildErr: () =>
+    consoleMessages.compilerErr('Erro in building the executable'),
 });
-// console.log(errChalk('Lol, no error'));
-
-/* 
-  --help: list all possible commands
-  run: just runs the cpp code
-  watch: makes exe and .o files and everything whenever a file is changed and/or saved
-  compile: simply compiles and stuff
-  
-*/
 
 // fs.readFile('compile.config.json', (err, data) => {
 //   if (err) {
