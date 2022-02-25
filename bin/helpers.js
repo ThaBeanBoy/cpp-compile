@@ -21,23 +21,25 @@ const mkDir = (path) => {
 // dir, travelDown = true,
 const filesInDir = (parameters) => {
   // Destructuring the parameters object
-  let { dir, travelDown, extNames } = parameters;
+  let { dir, travelDown, extNames, filePaths } = parameters;
 
   // Default values
-  travelDown = travelDown === undefined ? true : travelDown;
-
-  const missingDetails = dir === undefined;
-  // console.log(`helpers.js: \nfilesInDir() parameters`, parameters);
-
-  let filePaths = [];
+  travelDown = travelDown === undefined ? false : travelDown;
+  filePaths = filePaths === undefined ? [] : filePaths;
 
   // Getting all the files
-  if (!missingDetails) {
+  const detailsAvailable = dir !== undefined;
+  if (detailsAvailable) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach((dirent) => {
       if (dirent.isFile()) {
         filePaths.push(`${dir}/${dirent.name}`);
       } else if (travelDown) {
-        filesInDir(`${dir}/${dirent.name}`);
+        filesInDir({
+          dir: `${dir}/${dirent.name}`,
+          travelDown: true,
+          extNames: extNames,
+          filePaths: filePaths,
+        });
       }
     });
 
@@ -51,11 +53,15 @@ const filesInDir = (parameters) => {
       }
       // Has to filter based on 1 ext name
       else {
-        filePaths = filePaths.filter((file) => path.extname(file) === extNames);
+        filePaths = filePaths.filter((file) => {
+          // file === extNames ? console.log(`filtered out - ${file}`) : {};
+          return path.extname(file) === extNames;
+        });
       }
     }
   } else {
     consoleMessages.devErr(`fault in the directory provided: Dir('${dir}')`);
+    // throw err;
   }
 
   return filePaths;

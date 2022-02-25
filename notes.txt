@@ -1,2 +1,21 @@
+#Have to be installed:
+    gnu/g++ compiler is used
+    Astyles for formating
+
 alot of help from https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs
 helped in understanding the bin folder, and you have to install this globally for the CLI to work anywhere
+
+#Compilation
+    ><Compile all .cpp files in a directory
+    ><Check if there is a source
+    ><Check if there are .cpp files in a source
+    ><Console out any errors from the compiler
+    <>Format all .cppFiles
+
+#Init
+
+#Generate Class
+
+#Watch files
+    <>Watch all .cpp and .h files
+    <>Ability to watch files that may not be a .cpp file

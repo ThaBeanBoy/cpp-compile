@@ -44,15 +44,15 @@ const compile = (Parameters) => {
 
     // Make .o files
     // <> What should happen if there are no .cpp files
+    consoleMessages.compilerErr('Returned on line 48 <All good>');
     let filePaths = filesInDir({
-      dir: './source',
+      dir: './source/',
       travelDown: true,
       extNames: '.cpp',
     });
 
     // Continue with compilation if .cpp files are found, otherwise, execute the noCppFiles function
     const compileFiles = () => {
-      console.log('file paths:', filePaths);
       for (const file of filePaths) {
         let oFileGenerationError = false;
         execSync(`g++ -c ${file}`, (err, stdout, stderr) => {
@@ -70,6 +70,7 @@ const compile = (Parameters) => {
             oFilesBuildError();
 
             // Delete any of the .o files that were built
+            consoleMessages.compilerErr('Returned on line 75 <All good>');
             filesInDir({
               dir: '.',
               travelDown: false,
@@ -85,6 +86,7 @@ const compile = (Parameters) => {
 
       // Making the exe file
       let exeBuildCommand = 'g++ -o bin/main ';
+      consoleMessages.compilerErr('Returned on line 90 <All good>');
       const oFilesGenerated = filesInDir({
         dir: '.',
         travelDown: false,
@@ -93,7 +95,7 @@ const compile = (Parameters) => {
       oFilesGenerated.forEach(
         (file) => (exeBuildCommand += `${file.replace('./', '')} `)
       );
-      console.log(exeBuildCommand);
+
       execSync(exeBuildCommand, (err, stdout, stderr) => {
         let thereWasExeBuildErr = false;
         if (err) {
@@ -108,22 +110,34 @@ const compile = (Parameters) => {
 
         if (thereWasExeBuildErr) {
           exeBuildErr();
-          //<> Delete any of the .o files that were built
+
+          // Delete any of the .o files that were built
+          consoleMessages.compilerErr('Returned on line 117 <Still to check>');
+          filesInDir({
+            dir: '.',
+            travelDown: false,
+            extNames: '.o',
+          }).forEach((file) => {
+            fs.unlinkSync(file, () => {});
+          });
+
           return;
         }
       });
 
       // Delete the old .o files and .exe
+      consoleMessages.compilerErr('Returned on line 131 <Still to check>');
       filesInDir({
-        dir: './bin/oFiles',
+        dir: './bin/',
         travelDown: true,
         extNames: ['.o', '.exe'],
       }).forEach((file) => fs.unlinkSync(file, () => {}));
 
       // Place exe file and .o files in the bin
+      consoleMessages.compilerErr('Returned on line 138 <Still to check>');
       filesInDir({
-        dir: '.',
-        travelDown: true,
+        dir: './',
+        travelDown: false,
         extNames: ['.o', '.exe'],
       }).forEach((file) => {
         // Moving .o files
@@ -147,17 +161,17 @@ const compile = (Parameters) => {
           rtnTrue: () => {
             // Generate main.cpp file in source
             consoleMessages.devErr('Making main.cpp');
-            const cppFileBoilerPlate = `#include <iostream>\nusing namespace std;\n\nint main() {\ncout << "Hello world" << endl;\n\nreturn 0;\n}\n// Auto generated file.`;
+            const cppFileBoilerPlate = `#include <iostream>\nusing namespace std;\n\nint main() {\n\tcout << "Hello world" << endl;\n\n\treturn 0;\n}\n// Auto generated file.`;
             fs.appendFileSync('source/main.cpp', cppFileBoilerPlate);
 
             // Updating the filePaths,  so it's now aware of the generated files
+            consoleMessages.compilerErr('Returned on line 163 <All good>');
             filePaths = filesInDir({
               dir: './source',
               travelDown: true,
               extNames: '.cpp',
             });
 
-            consoleMessages.devErr('compiling files');
             compileFiles();
           },
         });

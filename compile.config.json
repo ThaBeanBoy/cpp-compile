@@ -1,13 +1,11 @@
 {
   "keep-o-files": false,
-  "watch": false,
-  "clean": false,
   "dontClean": [],
 
   "sourceFolder": "",
-  "outputExecs": "",
 
   "dontCompile": [],
+  "dontCompileFilesInDirectory": [],
 
   "execFile": "Bundled",
   "exeFiles": [
@@ -18,5 +16,8 @@
   ],
 
   "dontFormatt": [],
-  "logCmdExecs": false
+  "OnlyFormat": [],
+
+  "logCmdExecs": false,
+  "watchFiles": []
 }
