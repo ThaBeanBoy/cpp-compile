@@ -2,6 +2,11 @@
 
 import inquirer from 'inquirer';
 import chalk from 'chalk';
+// const yargs = require('yargs/yargs')
+// const { hideBin } = require('yargs/helpers')
+import Yargs from 'yargs/build';
+import { hideBin } from 'yargs/helpers';
+const argv = yargs(hideBin(process.argv)).argv;
 
 import compile from './compile.js';
 
@@ -14,6 +19,10 @@ import { consoleMessages } from './helpers.js';
   compile: simply compiles and stuff
   
 */
+
+// CLI Args
+// let args = process.args;
+console.log(argv);
 
 compile({
   noSource: (params) => {
@@ -71,24 +80,3 @@ compile({
   exeBuildErr: () =>
     consoleMessages.compilerErr('Erro in building the executable'),
 });
-
-// fs.readFile('compile.config.json', (err, data) => {
-//   if (err) {
-//     // No config file
-//     // console.log('No config file');
-//     inquirer
-//       .prompt([
-//         {
-//           type: 'confirm',
-//           name: 'makeConfig',
-//           message: 'Should I generate a config file?',
-//         },
-//       ])
-//       .then((answers) => {
-//         console.log(answers);
-//       });
-//   } else {
-//     const config = JSON.parse(data);
-//     console.log(config);
-//   }
-// });
