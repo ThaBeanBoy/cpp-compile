@@ -1,15 +1,22 @@
 #Have to be installed:
     gnu/g++ compiler is used
+
     Astyles for formating
+        Downloading from https://sourceforge.net/projects/astyle/
+
+        Installing:
 
 alot of help from https://developer.okta.com/blog/2019/06/18/command-line-app-with-nodejs
 helped in understanding the bin folder, and you have to install this globally for the CLI to work anywhere
 
+c/c++ (Microsoft) extension has to be installed
 #Compilation
+    <>Check if g++ is there
     ><Compile all .cpp files in a directory
     ><Check if there is a source
     ><Check if there are .cpp files in a source
     ><Console out any errors from the compiler
+    <>If there is no formatter, tell user posible ways they could format the code
     <>Format all .cppFiles
 
 #Init

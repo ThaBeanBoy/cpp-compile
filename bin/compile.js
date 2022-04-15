@@ -44,7 +44,6 @@ const compile = (Parameters) => {
 
     // Make .o files
     // <> What should happen if there are no .cpp files
-    consoleMessages.compilerErr('Returned on line 48 <All good>');
     let filePaths = filesInDir({
       dir: './source/',
       travelDown: true,
@@ -70,7 +69,6 @@ const compile = (Parameters) => {
             oFilesBuildError();
 
             // Delete any of the .o files that were built
-            consoleMessages.compilerErr('Returned on line 75 <All good>');
             filesInDir({
               dir: '.',
               travelDown: false,
@@ -85,8 +83,7 @@ const compile = (Parameters) => {
       }
 
       // Making the exe file
-      let exeBuildCommand = 'g++ -o bin/main ';
-      consoleMessages.compilerErr('Returned on line 90 <All good>');
+      let exeBuildCommand = 'g++ -o main ';
       const oFilesGenerated = filesInDir({
         dir: '.',
         travelDown: false,
@@ -96,6 +93,8 @@ const compile = (Parameters) => {
         (file) => (exeBuildCommand += `${file.replace('./', '')} `)
       );
 
+      console.log('ofiles', oFilesGenerated);
+      console.log('building exe file', exeBuildCommand);
       execSync(exeBuildCommand, (err, stdout, stderr) => {
         let thereWasExeBuildErr = false;
         if (err) {
@@ -112,7 +111,6 @@ const compile = (Parameters) => {
           exeBuildErr();
 
           // Delete any of the .o files that were built
-          consoleMessages.compilerErr('Returned on line 117 <Still to check>');
           filesInDir({
             dir: '.',
             travelDown: false,
@@ -126,17 +124,22 @@ const compile = (Parameters) => {
       });
 
       // Delete the old .o files and .exe
-      consoleMessages.compilerErr('Returned on line 131 <Still to check>');
       filesInDir({
         dir: './bin/',
         travelDown: true,
         extNames: ['.o', '.exe'],
       }).forEach((file) => fs.unlinkSync(file, () => {}));
 
+      // console.log(
+      //   filesInDir({
+      //     dir: '.',
+      //     travelDown: false,
+      //     extNames: ['.o', '.exe'],
+      //   })
+      // );
       // Place exe file and .o files in the bin
-      consoleMessages.compilerErr('Returned on line 138 <Still to check>');
       filesInDir({
-        dir: './',
+        dir: '.',
         travelDown: false,
         extNames: ['.o', '.exe'],
       }).forEach((file) => {
@@ -144,8 +147,9 @@ const compile = (Parameters) => {
         let newPath =
           path.extname(file) === '.o'
             ? `./bin/oFiles/${file.replace('./', '')}`
-            : `./bin/`;
+            : `./bin/${file.replace('./', '')}`;
 
+        // console.log(newPath);
         fs.renameSync(file, newPath);
       });
 
@@ -165,7 +169,6 @@ const compile = (Parameters) => {
             fs.appendFileSync('source/main.cpp', cppFileBoilerPlate);
 
             // Updating the filePaths,  so it's now aware of the generated files
-            consoleMessages.compilerErr('Returned on line 163 <All good>');
             filePaths = filesInDir({
               dir: './source',
               travelDown: true,

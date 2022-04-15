@@ -18,6 +18,5 @@
   "dontFormatt": [],
   "OnlyFormat": [],
 
-  "logCmdExecs": false,
-  "watchFiles": []
+  "logCmdExecs": false
 }

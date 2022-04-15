@@ -13,9 +13,9 @@
   "author": "TG Chipoyera",
   "license": "ISC",
   "dependencies": {
+    "argparse": "^2.0.1",
     "chalk": "^5.0.0",
     "inquirer": "^8.1.5",
-    "nodemon": "^2.0.13",
-    "yargs": "^17.3.1"
+    "nodemon": "^2.0.13"
   }
 }
