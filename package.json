@@ -6,7 +6,6 @@
   "bin": {
     "cpp-comp": "./bin/cli.js"
   },
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "argparse": "^2.0.1",
-    "chalk": "^5.0.0",
+    "chalk": "^4.1.2",
     "inquirer": "^8.1.5",
     "nodemon": "^2.0.13",
     "yargs": "^17.4.1"

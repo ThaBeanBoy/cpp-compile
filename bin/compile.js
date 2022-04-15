@@ -1,10 +1,15 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
-import { execSync } from 'child_process';
+const fs = require('fs');
+const path = require('path');
+const { execSync } = require('child_process');
 
-import { mkDir, filesInDir, consoleMessages, readFile } from './helpers.js';
+const {
+  mkDir,
+  filesInDir,
+  consoleMessages,
+  readFile,
+} = require('./helpers.js');
 
 // Parameters: compileSuccess: function, noErrors: function, noSource :function
 const compile = (Parameters) => {
@@ -187,4 +192,4 @@ const compile = (Parameters) => {
       });
 };
 
-export default compile;
+module.exports = compile;

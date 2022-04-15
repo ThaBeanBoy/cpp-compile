@@ -1,4 +1,4 @@
-import { filesInDir } from './helpers.js';
+const { filesInDir } = require('./helpers.js');
 
 // ! Website that may help
 // https://www.geeksforgeeks.org/node-js-fs-watchfile-method/

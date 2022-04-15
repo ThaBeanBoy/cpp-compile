@@ -1,16 +1,14 @@
 #!/usr/bin/env node
 
-import inquirer from 'inquirer';
-import chalk from 'chalk';
-// const yargs = require('yargs/yargs')
-// const { hideBin } = require('yargs/helpers')
-import Yargs from 'yargs/build';
-import { hideBin } from 'yargs/helpers';
+var inquirer = require('inquirer');
+const chalk = require('chalk');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 
-import compile from './compile.js';
+const compile = require('./compile.js');
 
-import { consoleMessages } from './helpers.js';
+const { consoleMessages } = require('./helpers.js');
 
 /* 
   help: list all possible commands
@@ -19,10 +17,6 @@ import { consoleMessages } from './helpers.js';
   compile: simply compiles and stuff
   
 */
-
-// CLI Args
-// let args = process.args;
-console.log(argv);
 
 compile({
   noSource: (params) => {
@@ -80,3 +74,6 @@ compile({
   exeBuildErr: () =>
     consoleMessages.compilerErr('Erro in building the executable'),
 });
+
+console.log(argv);
+// if

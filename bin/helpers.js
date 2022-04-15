@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import path from 'path';
+const fs = require('fs');
+const path = require('path');
 
-import chalk from 'chalk';
+const chalk = require('chalk');
 
 const mkDir = (path) => {
   if (!fs.existsSync(path)) {
@@ -98,4 +98,4 @@ const consoleMessages = {
   allGoodNoBg: (msg) => console.log(chalk.green(msg)),
 };
 
-export { mkDir, filesInDir, readFile, consoleMessages };
+module.exports = { mkDir, filesInDir, readFile, consoleMessages };
