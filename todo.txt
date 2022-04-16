@@ -11,18 +11,34 @@ helped in understanding the bin folder, and you have to install this globally fo
 
 c/c++ (Microsoft) extension has to be installed
 #Compilation
-    <>Check if g++ is there
     ><Compile all .cpp files in a directory
     ><Check if there is a source
     ><Check if there are .cpp files in a source
     ><Console out any errors from the compiler
-    <>If there is no formatter, tell user posible ways they could format the code
+    <>Check if g++ is there
+    <>Check if the program is still running
     <>Format all .cppFiles
-
-#Init
-
-#Generate Class
 
 #Watch files
     <>Watch all .cpp and .h files
     <>Ability to watch files that may not be a .cpp file
+    <>Watch from the config
+
+#Config file
+	<>Import config
+	<>G++ C++ version
+	<>Keep o files
+	<>Source folder
+	<>dont compile
+	<>don't compile files (with name or directory)
+	<>exec file name
+	<>exec files
+	<>format
+	<>don't format
+	<>log cmd executions
+
+#Class generator
+
+#Library generator
+
+#functions and header files watch thing

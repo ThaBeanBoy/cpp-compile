@@ -6,8 +6,9 @@ This is a command line inteface that helps me with my cpp projects. It runs on n
 
 ## <u> Prerequisite </u>
 
-1. The backbone of this cli is [Node JS](https://nodejs.org/en/), <span style="color: red">without it, this cli will not work</span>. here's a link to download node js, [download Node JS](https://nodejs.org/en/download/)
-2. Another thing you'll needm is to [NPM](https://www.npmjs.com/). You could say, this allows you to install the cli globally, that way, you can just use **cpp-comp** in any directory. you don't have to download npm, it comes with node js fam.
+1. You will need the latest version of Mingw-w64 which you can get from [here](https://www.msys2.org/), and follow the installation guide.
+2. The backbone of this cli is [Node JS](https://nodejs.org/en/), <span style="color: red">without it, this cli will not work</span>. here's a link to download node js, [download Node JS](https://nodejs.org/en/download/)
+3. Another thing you'll needm is to [NPM](https://www.npmjs.com/). You could say, this allows you to install the cli globally, that way, you can just use **cpp-comp** in any directory. you don't have to download npm, it comes with node js fam.
 
 ## <u> Installation </u>
 
@@ -29,11 +30,12 @@ There are 2 ways of installing this cli, honestly, it isn't on npm right now, so
 So at the most basic level, this cli will take all .cpp files that it finds in a source folder, compiles them down to .o files, then the linker will do finish up the process and an execution file will be made. lets compile a basic .cpp project.
 
 to compile, input the following in the cli <br>
-<span style="color:red"> don't worry if you have an empty prject file, <u>**cpp-comp**</u> will auto-generate a source directory and a main.cpp file </span>
 
 ```sh
 cpp-comp
 ```
+
+<span style="color:red"> don't worry if you have an empty prject file, <u>**cpp-comp**</u> will auto-generate a source directory and a main.cpp file </span>
 
 If you really want to know, here's the compilation process (**NB**: this is a very dumbed down explanation):
 
@@ -61,14 +63,14 @@ In order to watch files, you can do it one of the folowing ways
 
 - in the CLI:
 
-```
-$ cpp-comp -w
+```sh
+cpp-comp -w
 ```
 
 or
 
-```
-$ cpp-comp --watch
+```sh
+cpp-comp --watch
 ```
 
 - in the compile.config.json
