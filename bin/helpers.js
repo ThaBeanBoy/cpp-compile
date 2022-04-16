@@ -2,8 +2,10 @@
 
 const fs = require('fs');
 const path = require('path');
+const { exec, execSync } = require('child_process');
 
 const chalk = require('chalk');
+const { stderr } = require('process');
 
 const mkDir = (path) => {
   if (!fs.existsSync(path)) {
@@ -84,6 +86,35 @@ const readFile = (filePath) => {
   }
 };
 
+const isRunning = (file) => {
+  const platform = process.platform;
+  let cmd = '';
+
+  switch (platform) {
+    case 'win32':
+      cmd = 'tasklist';
+      break;
+
+    case 'linux':
+      cmd = 'ps -A';
+      break;
+
+    case 'darwin':
+      cmd = `ps -ax | grep ${file}`;
+      break;
+
+    default:
+      consoleMessages.compilerErr(
+        'Compile Error: ' +
+          "Couldn't not tell if your executeable is running based, you can notify us by telling us what Operating System you running on"
+      );
+      break;
+  }
+
+  const stdOut = execSync(cmd).toString('utf-8');
+  return stdOut.toLowerCase().indexOf(file.toLowerCase()) > -1;
+};
+
 const consoleMessages = {
   devErr: (msg) => {
     console.log(chalk.black.bgRedBright(msg));
@@ -98,4 +129,10 @@ const consoleMessages = {
   allGoodNoBg: (msg) => console.log(chalk.green(msg)),
 };
 
-module.exports = { mkDir, filesInDir, readFile, consoleMessages };
+module.exports = {
+  mkDir,
+  filesInDir,
+  readFile,
+  isRunning,
+  consoleMessages,
+};

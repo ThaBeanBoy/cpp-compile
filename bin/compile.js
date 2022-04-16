@@ -11,14 +11,15 @@ const {
   filesInDir,
   consoleMessages,
   readFile,
+  isRunning,
 } = require('./helpers.js');
-const { sync } = require('command-exists');
 
 // Parameters: compileSuccess: function, noErrors: function, noSource :function
 const compile = (Parameters) => {
   const bln_gppAvailable = commandExistsSync('g++');
+  const mainIsRunning = isRunning('main.exe');
 
-  if (bln_gppAvailable) {
+  if (bln_gppAvailable && !mainIsRunning) {
     let {
       compileSuccess,
       noErrors,
@@ -104,8 +105,8 @@ const compile = (Parameters) => {
           (file) => (exeBuildCommand += `${file.replace('./', '')} `)
         );
 
-        console.log('ofiles', oFilesGenerated);
-        console.log('building exe file', exeBuildCommand);
+        // console.log('ofiles', oFilesGenerated);
+        // console.log('building exe file', exeBuildCommand);
         execSync(exeBuildCommand, (err, stdout, stderr) => {
           let thereWasExeBuildErr = false;
           if (err) {
@@ -196,9 +197,17 @@ const compile = (Parameters) => {
       : noSource({
           rtnTrue: theresSourceCompile,
         });
-  } else {
+  }
+  // g++ not available
+  else if (!bln_gppAvailable) {
     consoleMessages.compilerErr(
-      'Please get Mingw-w64 or g++, You can use the following link: https://www.msys2.org/'
+      ' Please get Mingw-w64 or g++, You can use the following link: https://www.msys2.org/ '
+    );
+  }
+  // main is running
+  else {
+    consoleMessages.compilerErr(
+      " Couldn't compile: <main.exe> is still running "
     );
   }
 };

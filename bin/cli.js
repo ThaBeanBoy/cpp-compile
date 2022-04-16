@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
 var inquirer = require('inquirer');
 const chalk = require('chalk');
 
@@ -12,19 +11,10 @@ const argv = yargs(hideBin(process.argv)).argv;
 // file watcher
 const watch = require('node-watch');
 
-var commandExists = require('command-exists');
-
 const compile = require('./compile.js');
 
 const { consoleMessages } = require('./helpers.js');
 
-/* 
-  help: list all possible commands
-  run: just runs the cpp code
-  watch: makes exe and .o files and everything whenever a file is changed and/or saved
-  compile: simply compiles and stuff
-  
-*/
 const comp = () =>
   compile({
     noSource: (params) => {
@@ -95,6 +85,13 @@ if (argv.w || argv.watch) {
   // !make sure the error prones are dealt with first
   // watch('./', { recursive: true }, () => comp());
 }
+/* 
+  help: list all possible commands
+  run: just runs the cpp code
+  watch: makes exe and .o files and everything whenever a file is changed and/or saved
+  compile: simply compiles and stuff
+  
+*/
 
 // const parser = new ArgumentParser({
 //   description: 'Argparse example',
