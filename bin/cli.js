@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const { execSync } = require('child_process');
 var inquirer = require('inquirer');
 const chalk = require('chalk');
 
@@ -10,6 +11,8 @@ const argv = yargs(hideBin(process.argv)).argv;
 
 // file watcher
 const watch = require('node-watch');
+
+var commandExists = require('command-exists');
 
 const compile = require('./compile.js');
 

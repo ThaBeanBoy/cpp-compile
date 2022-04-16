@@ -15,7 +15,7 @@ c/c++ (Microsoft) extension has to be installed
     ><Check if there is a source
     ><Check if there are .cpp files in a source
     ><Console out any errors from the compiler
-    <>Check if g++ is there
+    ><Check if g++ is there
     <>Check if the program is still running
     <>Format all .cppFiles
 
