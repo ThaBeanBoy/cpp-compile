@@ -57,6 +57,8 @@ int main() {
 // Auto generated file.
 ```
 
+## <u> File Formating </u>
+
 ## <u> File Watching </u>
 
 In order to watch files, you can do it one of the folowing ways
