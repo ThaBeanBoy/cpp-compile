@@ -73,20 +73,15 @@ const readFile = (filePath) => {
   const detailsAvailable = filePath !== undefined;
 
   if (detailsAvailable) {
-    fs.readFileSync(filePath, 'utf-8', (err, data) => {
-      if (err) {
-        console.log(err);
-        return;
-      }
-
-      return data;
-    });
+    return (fileContents = fs.readFileSync(filePath, { encoding: 'utf-8' }));
   } else {
     consoleMessages.devErr('There is something wrong with the path provided');
+    return '';
   }
 };
 
 const isRunning = (file) => {
+  // largely based on this: https://stackoverflow.com/questions/38033127/node-js-how-to-check-a-process-is-running-by-the-process-name
   const platform = process.platform;
   let cmd = '';
 

@@ -2,6 +2,8 @@
 
 var commandExistsSync = require('command-exists').sync;
 
+const { format } = require('astyle');
+
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -57,7 +59,7 @@ const compile = (Parameters) => {
       // Make .o files
       // <> What should happen if there are no .cpp files
       let filePaths = filesInDir({
-        dir: './source/',
+        dir: './source',
         travelDown: true,
         extNames: '.cpp',
       });
@@ -137,7 +139,7 @@ const compile = (Parameters) => {
 
         // Delete the old .o files and .exe
         filesInDir({
-          dir: './bin/',
+          dir: './bin',
           travelDown: true,
           extNames: ['.o', '.exe'],
         }).forEach((file) => fs.unlinkSync(file, () => {}));
@@ -165,7 +167,16 @@ const compile = (Parameters) => {
           fs.renameSync(file, newPath);
         });
 
-        //<> format all .cpp files with AStyle/ Artistic files
+        // formating .cpp and .h files with astyle
+        filesInDir({
+          dir: './source',
+          travelDown: true,
+          extNames: ['.cpp', '.h'],
+        }).forEach((file) => {
+          format(readFile(file), '--style=allman').then((res) =>
+            fs.writeFileSync(file, res)
+          );
+        });
 
         // if the compilation is done with no errors, respond to the cli
         consoleMessages.allGood(' exe files ready to go!! ');

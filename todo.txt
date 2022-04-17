@@ -17,10 +17,10 @@ c/c++ (Microsoft) extension has to be installed
     ><Console out any errors from the compiler
     ><Check if g++ is there
     ><Check if the program is still running
-    <>Format all .cppFiles
+    ><Format all .cppFiles
 
 #Watch files
-    <>Watch all .cpp and .h files
+    <>Watch all .cpp and .h files ONLY!!!
     <>Ability to watch files that may not be a .cpp file
     <>Watch from the config
 
@@ -36,6 +36,8 @@ c/c++ (Microsoft) extension has to be installed
 	<>format
 	<>don't format
 	<>log cmd executions
+
+    <>If there's program still running, should we stop the execution and continue the compilation process or just stop the compilation process
 
 #Class generator
 
