@@ -167,16 +167,16 @@ const compile = (Parameters) => {
           fs.renameSync(file, newPath);
         });
 
-        // formating .cpp and .h files with astyle
-        filesInDir({
-          dir: './source',
-          travelDown: true,
-          extNames: ['.cpp', '.h'],
-        }).forEach((file) => {
-          format(readFile(file), '--style=allman').then((res) =>
-            fs.writeFileSync(file, res)
-          );
-        });
+        //! formating .cpp and .h files with astyle
+        // filesInDir({
+        //   dir: './source',
+        //   travelDown: true,
+        //   extNames: ['.cpp', '.h'],
+        // }).forEach((file) => {
+        //   format(readFile(file), '--style=allman').then((res) =>
+        //     fs.writeFileSync(file, res)
+        //   );
+        // });
 
         // if the compilation is done with no errors, respond to the cli
         consoleMessages.allGood(' exe files ready to go!! ');

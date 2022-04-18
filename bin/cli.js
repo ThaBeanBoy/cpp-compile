@@ -9,11 +9,15 @@ const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 
 // file watcher
+const { format } = require('astyle');
 const watch = require('node-watch');
 
 const compile = require('./compile.js');
+const watch = require('./watch.js');
 
-const { consoleMessages } = require('./helpers.js');
+const { consoleMessages, filesInDir, readFile } = require('./helpers.js');
+
+const fs = require('fs');
 
 const comp = () =>
   compile({
@@ -81,9 +85,20 @@ if (argv.w || argv.watch) {
   console.log('\n');
   consoleMessages.allGood('Watching files');
 
-  watch('./', { recursive: true }, () => console.log('changes were made'));
+  // watch('./', { recursive: true }, () => console.log('changes were made'));
   // !make sure the error prones are dealt with first
-  // watch('./', { recursive: true }, () => comp());
+  watch('./', { recursive: true }, () => {
+    comp();
+    filesInDir({
+      dir: './source',
+      travelDown: true,
+      extNames: ['.cpp', '.h'],
+    }).forEach((file) => {
+      format(readFile(file), '--style=allman').then((res) =>
+        fs.writeFileSync(file, res)
+      );
+    });
+  });
 }
 /* 
   help: list all possible commands

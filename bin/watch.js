@@ -1,14 +1,11 @@
+const chokidar = require('chokidar');
 const { filesInDir } = require('./helpers.js');
 
-// ! Website that may help
-// https://www.geeksforgeeks.org/node-js-fs-watchfile-method/
+const watch = () => {
+  chokidar.watch('./source/').on('all', (ev, path) => {
+    console.log('changes made');
+    console.log('ev: ', ev, '\npath: ', path);
+  });
+};
 
-// Compile on file saves,
-// This will make life easier because you won't have to continously compile manually, you just run da ting
-console.log(
-  filesInDir({
-    dir: './source',
-    travelDown: true,
-    extNames: '.cpp',
-  })
-);
+module.exports = watch;
