@@ -20,12 +20,18 @@ c/c++ (Microsoft) extension has to be installed
     ><Format all .cppFiles
 
 #Watch files
-    <>Watch all .cpp and .h files ONLY!!!
-    <>Ability to watch files that may not be a .cpp file
-    <>Watch from the config
+    ><Watch all .cpp and .h files ONLY!!!
+    <> Watch new files
+
+#Feedback
+    <> Show the user that is currently compiling (Maybe add an animation)
+    <> Show the user that their program has been compiled
+    <> Show errors in the code
 
 #Config file
 	<>Import config
+    <>Enable Watch from the config
+    <>Ability to watch files that may not be a .cpp file - can take arr of filenames
 	<>G++ C++ version
 	<>Keep o files
 	<>Source folder
@@ -39,8 +45,14 @@ c/c++ (Microsoft) extension has to be installed
 
     <>If there's program still running, should we stop the execution and continue the compilation process or just stop the compilation process
 
+#CLI Interactivity
+    <>Ability to watch files that may not be a .cpp file - command eg. '*.txt'
+
 #Class generator
 
 #Library generator
+    <>Generate header file
+    <>Generate Implementataion file
 
 #functions and header files watch thing
+    <> Implementataion file is the one that edits the header file, then compilation is started

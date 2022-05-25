@@ -8,18 +8,15 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const argv = yargs(hideBin(process.argv)).argv;
 
-// file watcher
-const { format } = require('astyle');
-const watch = require('node-watch');
-
 const compile = require('./compile.js');
 const watch = require('./watch.js');
 
-const { consoleMessages, filesInDir, readFile } = require('./helpers.js');
+const { consoleMessages } = require('./helpers.js');
 
-const fs = require('fs');
+const comp = () => {
+  //! console.clear();
+  consoleMessages.allGoodNoBg('Compiling...');
 
-const comp = () =>
   compile({
     noSource: (params) => {
       const { rtnTrue, rtnFalse } = params;
@@ -76,29 +73,19 @@ const comp = () =>
     exeBuildErr: () =>
       consoleMessages.compilerErr('Erro in building the executable'),
   });
-
-comp();
+};
 
 // console.log(argv.w);
 if (argv.w || argv.watch) {
   // user wants to watch files
-  console.log('\n');
+
+  console.clear();
   consoleMessages.allGood('Watching files');
 
-  // watch('./', { recursive: true }, () => console.log('changes were made'));
   // !make sure the error prones are dealt with first
-  watch('./', { recursive: true }, () => {
-    comp();
-    filesInDir({
-      dir: './source',
-      travelDown: true,
-      extNames: ['.cpp', '.h'],
-    }).forEach((file) => {
-      format(readFile(file), '--style=allman').then((res) =>
-        fs.writeFileSync(file, res)
-      );
-    });
-  });
+  watch(() => comp());
+} else {
+  comp();
 }
 /* 
   help: list all possible commands

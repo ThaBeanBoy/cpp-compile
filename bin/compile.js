@@ -168,18 +168,30 @@ const compile = (Parameters) => {
         });
 
         //! formating .cpp and .h files with astyle
-        // filesInDir({
-        //   dir: './source',
-        //   travelDown: true,
-        //   extNames: ['.cpp', '.h'],
-        // }).forEach((file) => {
-        //   format(readFile(file), '--style=allman').then((res) =>
-        //     fs.writeFileSync(file, res)
-        //   );
-        // });
+        filesInDir({
+          dir: './source',
+          travelDown: true,
+          extNames: ['.cpp', '.h'],
+        }).forEach((file) => {
+          format(readFile(file), '--style=allman').then((res) =>
+            fs.writeFileSync(file, res)
+          );
+        });
 
         // if the compilation is done with no errors, respond to the cli
-        consoleMessages.allGood(' exe files ready to go!! ');
+        const time = new Date();
+        const zeroEffect = (num) => {
+          return num >= 10 ? num : `0${num}`;
+        };
+        const timeStamp = {
+          hour: zeroEffect(time.getHours()),
+          min: zeroEffect(time.getMinutes()),
+          sec: zeroEffect(time.getSeconds()),
+        };
+        //! console.clear();
+        consoleMessages.allGood(
+          `Compiled at: ${timeStamp.hour}:${timeStamp.min}:${timeStamp.sec}\nexe files ready to go!! `
+        );
       };
 
       filePaths.length !== 0

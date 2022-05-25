@@ -23,24 +23,29 @@ const mkDir = (path) => {
 // dir, travelDown = true,
 const filesInDir = (parameters) => {
   // Destructuring the parameters object
-  let { dir, travelDown, extNames, filePaths } = parameters;
+  let { dir, travelDown, extNames, filePaths, backslash } = parameters;
 
   // Default values
   travelDown = travelDown === undefined ? false : travelDown;
   filePaths = filePaths === undefined ? [] : filePaths;
+  backslash = backslash === undefined ? false : backslash;
 
   // Getting all the files
   const detailsAvailable = dir !== undefined;
   if (detailsAvailable) {
     fs.readdirSync(dir, { withFileTypes: true }).forEach((dirent) => {
+      // console.log('readSync func: ', dirent);
       if (dirent.isFile()) {
-        filePaths.push(`${dir}/${dirent.name}`);
+        filePaths.push(
+          `${dir}${backslash ? '\\' : '/'}${dirent.name}`.replace(/\\\\/g, '\\')
+        );
       } else if (travelDown) {
         filesInDir({
           dir: `${dir}/${dirent.name}`,
           travelDown: true,
           extNames: extNames,
           filePaths: filePaths,
+          backslash: backslash,
         });
       }
     });
@@ -124,10 +129,15 @@ const consoleMessages = {
   allGoodNoBg: (msg) => console.log(chalk.green(msg)),
 };
 
+const cppExtensionNames = ['.cpp', '.cxx', '.c++'];
+const hFileExtensions = ['h'];
+
 module.exports = {
   mkDir,
   filesInDir,
   readFile,
   isRunning,
   consoleMessages,
+  cppExtensionNames,
+  hFileExtensions,
 };
